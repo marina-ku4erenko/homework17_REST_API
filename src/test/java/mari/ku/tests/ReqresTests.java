@@ -20,7 +20,6 @@ public class ReqresTests {
         RestAssured.baseURI = "https://reqres.in";
     }
 
-    //1) Успешная регистрация пользователя https://reqres.in/api/register; проверить, что id и token не null
     @DisplayName("Проверка успешной регистрации пользователя")
     @Test
     void checkSuccessfulRegister() {
@@ -44,7 +43,6 @@ public class ReqresTests {
         assertThat((String) jsonPathResponseBody.get("token")).as("token").isNotNull();
     }
 
-    //2) НЕуспешная регистрация пользователя https://reqres.in/api/register; проверить текст ошибки и статус код 400
     @DisplayName("Проверка текста ошибки при неуспешной регистрации пользователя")
     @Test
     void checkUnsuccessfulRegister() {
@@ -66,8 +64,6 @@ public class ReqresTests {
         assertThat((String) jsonPathResponseBody.get("error")).as("error").isEqualTo("Missing password");
     }
 
-    //3) От реста https://reqres.in/api/unknown получить инфу, сколько сего цветов в списке ("total": 12) + проверить статус код 200;
-    //с помощью реста https://reqres.in/api/unknown/{id} проверить в каждом, что все поля заполнены
     @DisplayName("Проверка заполненности полей для каждого из цветов")
     @Test
     void checkEachColor() {
@@ -98,7 +94,6 @@ public class ReqresTests {
         }
     }
 
-    //4) Проверить, что не существует цвет c id https://reqres.in/api/unknown/{id}; проверить статус код 404
     @DisplayName("Проверка статус кода 404 при переходе к несуществующему цвету")
     @Test
     void checkUnknownColor404() {
@@ -118,8 +113,7 @@ public class ReqresTests {
                 .statusCode(404);
     }
 
-    //5) Изменить данные пользователя через PUT https://reqres.in/api/users/{id}; проверить, что updatedAt не null
-    @DisplayName("Проверка успешного изменения данных пользователя через PUT запрос")
+    @DisplayName("Проверка успешного изменения данных пользователя с помощью PUT запроса")
     @Test
     void checkUpdateUser() {
 
