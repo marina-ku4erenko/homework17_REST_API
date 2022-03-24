@@ -1,5 +1,7 @@
 package mari.ku.tests;
 
+import io.qameta.allure.Allure;
+import io.qameta.allure.restassured.AllureRestAssured;
 import io.restassured.RestAssured;
 import io.restassured.path.json.JsonPath;
 import io.restassured.response.Response;
@@ -11,6 +13,7 @@ import org.junit.jupiter.api.Test;
 import static io.restassured.RestAssured.get;
 import static io.restassured.RestAssured.given;
 import static io.restassured.http.ContentType.JSON;
+import static mari.ku.helpers.CustomAllureListener.withCustomTemplates;
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class ReqresTests {
@@ -24,17 +27,24 @@ public class ReqresTests {
     @Test
     void checkSuccessfulRegister() {
 
+        Allure.descriptionHtml("<p><span style=\"color: #008000;\">Отчёт с использованием<strong> AllureListener</strong></span></p>");
+
         JSONObject requestBody = new JSONObject();
         requestBody.put("email", "eve.holt@reqres.in");
         requestBody.put("password", "cityslicka");
 
         Response responseBody =
                 given()
+                        .filter(new AllureRestAssured())
                         .contentType(JSON)
                         .body(requestBody.toString())
+                        .log().uri()
+                        .log().body()
                         .when()
                         .post("/api/register")
                         .then()
+                        .log().status()
+                        .log().body()
                         .statusCode(200)
                         .extract().response();
 
@@ -47,16 +57,23 @@ public class ReqresTests {
     @Test
     void checkUnsuccessfulRegister() {
 
+        Allure.descriptionHtml("<p><span style=\"color: #008000;\">Отчёт с использованием<strong> CustomAllureListener</strong></span></p>");
+
         JSONObject requestBody = new JSONObject();
         requestBody.put("email", "eve.holt@reqres.in");
 
         Response responseBody =
                 given()
+                        .filter(withCustomTemplates())
                         .contentType(JSON)
                         .body(requestBody.toString())
+                        .log().uri()
+                        .log().body()
                         .when()
                         .post("/api/register")
                         .then()
+                        .log().status()
+                        .log().body()
                         .statusCode(400)
                         .extract().response();
 
@@ -68,9 +85,18 @@ public class ReqresTests {
     @Test
     void checkEachColor() {
 
+        Allure.descriptionHtml("<p><span style=\"color: #008000;\">Отчёт с использованием<strong> CustomAllureListener</strong></span></p>");
+
         Response responseBodyList =
-                get("/api/unknown")
+                given()
+                        .filter(withCustomTemplates())
+                        .log().uri()
+                        .log().body()
+                        .when()
+                        .get("/api/unknown")
                         .then()
+                        .log().status()
+                        .log().body()
                         .statusCode(200)
                         .extract().response();
 
@@ -98,9 +124,18 @@ public class ReqresTests {
     @Test
     void checkUnknownColor404() {
 
+        Allure.descriptionHtml("<p><span style=\"color: #008000;\">Отчёт с использованием<strong> AllureListener</strong></span></p>");
+
         Response responseBodyList =
-                get("/api/unknown")
+                given()
+                        .filter(new AllureRestAssured())
+                        .log().uri()
+                        .log().body()
+                        .when()
+                        .get("/api/unknown")
                         .then()
+                        .log().status()
+                        .log().body()
                         .statusCode(200)
                         .extract().response();
 
@@ -117,17 +152,24 @@ public class ReqresTests {
     @Test
     void checkUpdateUser() {
 
+        Allure.descriptionHtml("<p><span style=\"color: #008000;\">Отчёт с использованием<strong> CustomAllureListener</strong></span></p>");
+
         JSONObject requestBody = new JSONObject();
         requestBody.put("name", "morpheus");
         requestBody.put("job", "zion resident");
 
         Response responseBody =
                 given()
+                        .filter(withCustomTemplates())
                         .contentType(JSON)
                         .body(requestBody.toString())
+                        .log().uri()
+                        .log().body()
                         .when()
                         .put("/api/users/2")
                         .then()
+                        .log().status()
+                        .log().body()
                         .statusCode(200)
                         .extract().response();
 

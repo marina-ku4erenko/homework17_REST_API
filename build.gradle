@@ -1,5 +1,25 @@
 plugins {
     id 'java'
+    id 'io.qameta.allure' version '2.9.6'
+}
+
+def allureVersion = '2.17.2',
+    restAssured = '4.4.0',
+    junitVersion = '5.8.2',
+    slf4jVersion = '1.7.32'
+
+allure {
+    adapter {
+        aspectjWeaver.set(true)
+        frameworks {
+            junit5 {
+                adapterVersion.set(allureVersion)
+            }
+        }
+    }
+    report {
+        version.set(allureVersion)
+    }
 }
 
 repositories {
@@ -11,13 +31,14 @@ tasks.withType(JavaCompile) {
 }
 
 dependencies {
-    testImplementation 'org.junit.jupiter:junit-jupiter:5.8.1'
-    testImplementation 'io.rest-assured:rest-assured:4.4.0'
-    testImplementation 'org.assertj:assertj-core:3.22.0'
+    testImplementation "org.junit.jupiter:junit-jupiter-api:$junitVersion"
+    testImplementation "io.rest-assured:rest-assured:$restAssured"
+    testImplementation "io.rest-assured:json-schema-validator:$restAssured"
+    testImplementation "io.qameta.allure:allure-rest-assured:$allureVersion"
+    testImplementation "org.assertj:assertj-core:3.22.0"
     testImplementation 'com.googlecode.json-simple:json-simple:1.1.1'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.8.1'
-    testRuntimeOnly 'org.slf4j:slf4j-simple:1.7.29'
-
+    testRuntimeOnly "org.junit.jupiter:junit-jupiter-engine:$junitVersion"
+    testRuntimeOnly "org.slf4j:slf4j-simple:$slf4jVersion"
 }
 
 tasks.withType(Test) {
